@@ -23,7 +23,7 @@ public class StatsController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Player not found") })
+            @ApiResponse(responseCode = "404", description = "Team not found") })
     @GetMapping(value = "/team-stats/{id}")
     public String getTeamStats(@PathVariable(value = "id") int id) {
         Team team = getTeamInfo(id);
@@ -42,7 +42,8 @@ public class StatsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden") })
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Player not found") })
     @GetMapping(value = "/player-stats/{id}")
     public String getPlayerStats(@PathVariable(value = "id") int id) {
         Player playerInfo = getPlayerInfo(id);
