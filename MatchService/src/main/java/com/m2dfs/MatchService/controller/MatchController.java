@@ -1,6 +1,7 @@
 package com.m2dfs.MatchService.controller;
 
 import com.m2dfs.MatchService.model.Match;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,6 +23,7 @@ public class MatchController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Match not found") })
+    @CircuitBreaker(name = "getMatch Breaker", fallbackMethod = "getMatch_fallback")
     @GetMapping(value = "/matches/{id}")
     public Match getMatch(@PathVariable(value = "id") int id) {
         Match match = matches.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
@@ -29,6 +31,10 @@ public class MatchController {
             return new Match(0, "Not Found", new ArrayList<>());
         }
         return match;
+    }
+
+    public Match getMatch_fallback(int id) {
+        return new Match(0, "Service unavailable", new ArrayList<>());
     }
 
     @Operation(summary = "Add a new match")

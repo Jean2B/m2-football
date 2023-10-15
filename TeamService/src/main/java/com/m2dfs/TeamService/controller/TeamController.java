@@ -1,6 +1,7 @@
 package com.m2dfs.TeamService.controller;
 
 import com.m2dfs.TeamService.model.Team;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,6 +23,7 @@ public class TeamController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Team not found") })
+    @CircuitBreaker(name = "getTeam Breaker", fallbackMethod = "getTeam_fallback")
     @GetMapping(value = "/teams/{id}")
     public Team getTeam(@PathVariable(value = "id") int id) {
         Team team = teams.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
@@ -29,6 +31,10 @@ public class TeamController {
             return new Team(0, "Not Found", new ArrayList<>());
         }
         return team;
+    }
+
+    public Team getTeam_fallback(int id) {
+        return new Team(0, "Service unavailable", new ArrayList<>());
     }
 
     @Operation(summary = "Add a new team")

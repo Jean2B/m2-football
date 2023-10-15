@@ -1,6 +1,7 @@
 package com.m2dfs.PlayerService.controller;
 
 import com.m2dfs.PlayerService.model.Player;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,6 +25,7 @@ public class PlayerController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Player not found") })
+    @CircuitBreaker(name = "getPlayer Breaker", fallbackMethod = "getPlayer_fallback")
     @GetMapping(value = "/players/{id}")
     public Player getPlayer(@PathVariable(value = "id") int id) {
         Player player = players.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
@@ -31,6 +33,10 @@ public class PlayerController {
             return new Player(0, "Not Found", 0);
         }
         return player;
+    }
+
+    public Player getPlayer_fallback(int id) {
+        return new Player(0, "Service unavailable", 0);
     }
 
     @Operation(summary = "Add a new player")
