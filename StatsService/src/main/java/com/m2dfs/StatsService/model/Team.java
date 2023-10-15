@@ -1,12 +1,13 @@
-package com.m2dfs.TeamService.model;
+package com.m2dfs.StatsService.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Team {
     private int id;
     private String name;
     private List<Integer> playerList; //Liste des id des joueurs
+
+    public Team() {}
 
     public Team(int id, String name, List<Integer> playerList) {
         super();

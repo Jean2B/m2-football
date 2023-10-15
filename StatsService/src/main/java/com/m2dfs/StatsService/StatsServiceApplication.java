@@ -2,8 +2,10 @@ package com.m2dfs.StatsService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class StatsServiceApplication {
 
 	public static void main(String[] args) {

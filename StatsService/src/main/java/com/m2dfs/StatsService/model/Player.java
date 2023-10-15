@@ -1,10 +1,11 @@
-package com.m2dfs.PlayerService.model;
+package com.m2dfs.StatsService.model;
 
 public class Player {
     private int id;
     private String name;
-
     private int number; //Numéro maillot
+
+    public Player() {}
 
     public Player(int id, String name, int number) {
         super();
