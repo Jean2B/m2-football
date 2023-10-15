@@ -8,3 +8,6 @@ eureka:
 spring:
   application:
     name: stats-service
+springdoc:
+  api-docs:
+    path: /api-docs
