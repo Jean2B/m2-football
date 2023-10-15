@@ -1,6 +1,9 @@
 package com.m2dfs.MatchService.controller;
 
 import com.m2dfs.MatchService.model.Match;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,6 +16,12 @@ public class MatchController {
         matches.add(new Match(1, "Test Match", new ArrayList<>()));
     }
 
+    @Operation(summary = "Get a match by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Match not found") })
     @GetMapping(value = "/matches/{id}")
     public Match getMatch(@PathVariable(value = "id") int id) {
         Match match = matches.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
@@ -22,11 +31,22 @@ public class MatchController {
         return match;
     }
 
+    @Operation(summary = "Add a new match")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden") })
     @PostMapping(value = "/matches")
     public void addTeam(@RequestBody Match newMatch) {
         matches.add(newMatch);
     }
 
+    @Operation(summary = "Edit an existing match")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Match not found") })
     @PutMapping(value = "/matches/{id}")
     public Match editMatches(@PathVariable(value = "id") int id, @RequestBody Match matchInfo) {
         Match match = matches.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
@@ -38,6 +58,12 @@ public class MatchController {
         return match;
     }
 
+    @Operation(summary = "Delete a match")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Match not found") })
     @DeleteMapping(value = "/matches/{id}")
     public void deleteMatches(@PathVariable(value = "id") int id) {
         matches.removeIf(team -> team.getId() == id);
